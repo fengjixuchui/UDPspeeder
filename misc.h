@@ -39,7 +39,11 @@ extern int fix_latency;
 //extern char local_ip[100], remote_ip[100];
 //extern int local_port, remote_port;
 
+
 extern address_t local_addr,remote_addr;
+
+extern address_t *out_addr;
+extern char *out_interface;
 
 extern conn_manager_t conn_manager;
 extern delay_manager_t delay_manager;

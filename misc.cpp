@@ -28,7 +28,10 @@ int output_interval_max=0*1000;
 
 int fix_latency=0;
 
+
 address_t local_addr,remote_addr;
+address_t *out_addr=0;
+char *out_interface=0;
 //u32_t local_ip_uint32,remote_ip_uint32=0;
 //char local_ip[100], remote_ip[100];
 //int local_port = -1, remote_port = -1;
@@ -654,6 +657,9 @@ void process_arg(int argc, char *argv[])
 		{"queue-len", required_argument,   0,'q'},
 		{"fec", required_argument,   0,'f'},
 		{"jitter", required_argument,   0,'j'},
+		{"out-addr", required_argument,   0,1},
+		{"out-interface", required_argument,    0, 1},
+		{"key", required_argument,   0,'k'},
 		{"header-overhead", required_argument,    0, 1},
 		//{"debug-fec", no_argument,    0, 1},
 		{"debug-fec-enc", no_argument,    0, 1},
@@ -941,6 +947,24 @@ void process_arg(int argc, char *argv[])
 				if(g_fec_par.mtu<100||g_fec_par.mtu>2000)
 				{
 					mylog(log_fatal,"fec_mtu should be between 100 and 2000\n");
+					myexit(-1);
+				}
+			}
+			else if(strcmp(long_options[option_index].name,"out-addr")==0)
+			{
+			    //has_b = true;
+			    mylog(log_debug,"out-addr=%s\n",optarg);
+			    out_addr=new address_t();
+			    out_addr->from_str(optarg);
+			}
+			else if(strcmp(long_options[option_index].name,"out-interface")==0)
+			{
+			    out_interface=new char[strlen(optarg)+10];
+				sscanf(optarg,"%s\n",out_interface);
+				mylog(log_debug,"out-interface=%s\n",out_interface);
+				if(strlen(out_interface)==0)
+				{
+					mylog(log_fatal,"out_interface string len=0??\n");
 					myexit(-1);
 				}
 			}
